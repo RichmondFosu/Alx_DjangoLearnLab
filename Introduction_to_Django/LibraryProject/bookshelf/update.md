@@ -1,9 +1,9 @@
 # update title
-b1.title = 'Nineteen Eighty-Four'
-b1.save()
+book.title = 'Nineteen Eighty-Four'
+book.save()
 
 # confirm update
-Book.objects.all()
+print(book.title)
 
 # output
 <QuerySet [<Book: Nineteen Eighty-Four by George Orwell>]>
