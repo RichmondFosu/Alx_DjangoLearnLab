@@ -1,5 +1,5 @@
 # retrieve all attributes of the book
-Book.objects.all()
+Book.objects.get()
 
 # output
 <QuerySet [<Book: 1984 by George Orwell>]>
