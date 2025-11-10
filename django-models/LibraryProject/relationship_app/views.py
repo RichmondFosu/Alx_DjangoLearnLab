@@ -9,6 +9,10 @@ def book_list(request):
     context = {'books': books}
     return render(request, 'relationship_app/list_books.html', context)
 
+# backward-compatible alias expected by some exercises/tests
+def list_books(request):
+    return book_list(request)
+
 class LibraryListView(ListView):
     model = Library
     template_name = 'relationship_app/library_list.html'
