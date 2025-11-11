@@ -1,0 +1,90 @@
+{% extends "relationship_app/base.html" %}
+
+{% block title %}Edit Book{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2>Edit Book</h2>
+            <p class="text-muted">Modify the details of the book: <strong>{{ book.title }}</strong></p>
+            
+            {% if error %}
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <strong>Error:</strong> {{ error }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endif %}
+
+            <form method="post" class="mt-4">
+                {% csrf_token %}
+                
+                <div class="mb-3">
+                    <label for="title" class="form-label">Book Title <span class="text-danger">*</span></label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="title" 
+                        name="title" 
+                        value="{{ book.title }}"
+                        placeholder="Enter book title" 
+                        required
+                    >
+                    <small class="form-text text-muted">The title of the book.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label for="author" class="form-label">Author <span class="text-danger">*</span></label>
+                    <select class="form-select" id="author" name="author" required>
+                        <option value="">-- Select an Author --</option>
+                        {% for author in authors %}
+                            {% if author.id == book.author.id %}
+                                <option value="{{ author.id }}" selected>{{ author.name }}</option>
+                            {% else %}
+                                <option value="{{ author.id }}">{{ author.name }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                    <small class="form-text text-muted">Select a different author if needed.</small>
+                </div>
+
+                <div class="mb-3">
+                    <label for="isbn" class="form-label">ISBN <span class="text-danger">*</span></label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="isbn" 
+                        name="isbn" 
+                        value="{{ book.isbn }}"
+                        placeholder="Enter ISBN (e.g., 978-3-16-148410-0)" 
+                        required
+                    >
+                    <small class="form-text text-muted">International Standard Book Number.</small>
+                </div>
+
+                <div class="alert alert-info" role="alert">
+                    <strong>Book Information:</strong>
+                    <ul class="mb-0">
+                        <li><strong>ID:</strong> {{ book.id }}</li>
+                        <li><strong>Current Author:</strong> {{ book.author.name }}</li>
+                    </ul>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-warning">
+                        <i class="bi bi-pencil"></i> Update Book
+                    </button>
+                    <a href="{% url 'book-list' %}" class="btn btn-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancel
+                    </a>
+                </div>
+            </form>
+
+            <hr class="mt-5">
+            <p class="text-muted">
+                <strong>Note:</strong> You need the <code>can_change_book</code> permission to edit books.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
