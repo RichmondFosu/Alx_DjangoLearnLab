@@ -1,0 +1,49 @@
+<!-- register.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+</head>
+<body>
+    <h1>Register</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div>
+            <label for="id_username">Username:</label>
+            {{ form.username }}
+            {% if form.username.errors %}
+                <p style="color: red;">{{ form.username.errors }}</p>
+            {% endif %}
+        </div>
+        
+        <div>
+            <label for="id_email">Email:</label>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <p style="color: red;">{{ form.email.errors }}</p>
+            {% endif %}
+        </div>
+        
+        <div>
+            <label for="id_password1">Password:</label>
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+                <p style="color: red;">{{ form.password1.errors }}</p>
+            {% endif %}
+        </div>
+        
+        <div>
+            <label for="id_password2">Confirm Password:</label>
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+                <p style="color: red;">{{ form.password2.errors }}</p>
+            {% endif %}
+        </div>
+        
+        <button type="submit">Register</button>
+    </form>
+    
+    <p>Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+</body>
+</html>
