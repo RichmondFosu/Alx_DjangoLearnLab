@@ -4,8 +4,10 @@ from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView as DjangoLogoutView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.urls import reverse_lazy
 from .models import Library, Book
 from .forms import CustomUserCreationForm
 
@@ -36,7 +38,7 @@ class LibraryDetailView(DetailView):
 
 # ============ AUTHENTICATION VIEWS ============
 
-def register_view(request):
+def register(request):
     """
     User registration view.
     - GET: display the registration form
@@ -62,48 +64,14 @@ def register_view(request):
     return render(request, 'relationship_app/register.html', context)
 
 
-def login_view(request):
-    """
-    User login view.
-    - GET: display the login form
-    - POST: authenticate user and create a session
-    
-    How it works:
-    1. User submits username and password
-    2. Django authenticates the credentials against the database
-    3. If valid, a session is created and stored in the database
-    4. Session ID is sent to browser as a cookie
-    5. On subsequent requests, Django uses the session ID to identify the user
-    6. request.user contains the logged-in user object
-    """
-    if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        
-        # Authenticate credentials
-        user = authenticate(request, username=username, password=password)
-        
-        if user is not None:
-            # User is valid, log them in (creates session)
-            login(request, user)
-            return redirect('book-list')
-        else:
-            # Invalid credentials
-            error = "Invalid username or password"
-            context = {'error': error}
-            return render(request, 'relationship_app/login.html', context)
-    
-    return render(request, 'relationship_app/login.html')
+# Django's built-in LoginView with custom template
+class LoginView(DjangoLoginView):
+    template_name = 'relationship_app/login.html'
+    success_url = reverse_lazy('book-list')
 
 
-def logout_view(request):
-    """
-    User logout view.
-    - Deletes the session from the database
-    - Clears the session cookie from the browser
-    - User is no longer authenticated
-    """
-    logout(request)
-    return redirect('book-list')
+# Django's built-in LogoutView with custom template
+class LogoutView(DjangoLogoutView):
+    template_name = 'relationship_app/logout.html'
 
 
