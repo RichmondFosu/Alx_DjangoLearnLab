@@ -1,4 +1,7 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # Create your models here.
 class Author(models.Model):
@@ -27,3 +30,54 @@ class Librarian(models.Model):
 
     def __str__(self):
         return f'{self.name} at {self.library.name}'
+
+
+# ============ USER PROFILE MODEL WITH ROLES ============
+
+class UserProfile(models.Model):
+    """
+    Extended user profile with role-based access control.
+    
+    Roles:
+    - Admin: Full access to all features
+    - Librarian: Can manage library and books
+    - Member: Regular user with read-only access
+    """
+    
+    ROLE_CHOICES = (
+        ('Admin', 'Admin'),
+        ('Librarian', 'Librarian'),
+        ('Member', 'Member'),
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='Member')
+    
+    def __str__(self):
+        return f'{self.user.username} - {self.role}'
+    
+    class Meta:
+        verbose_name = 'User Profile'
+        verbose_name_plural = 'User Profiles'
+
+
+# ============ DJANGO SIGNALS FOR AUTO PROFILE CREATION ============
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+    """
+    Signal handler to automatically create a UserProfile when a new User is created.
+    
+    This ensures every user automatically gets a profile with the default 'Member' role.
+    """
+    if created:
+        UserProfile.objects.create(user=instance)
+
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+    """
+    Signal handler to automatically save the UserProfile when a User is saved.
+    """
+    if hasattr(instance, 'profile'):
+        instance.profile.save()

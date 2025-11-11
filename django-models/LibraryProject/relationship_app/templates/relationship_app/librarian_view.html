@@ -1,0 +1,23 @@
+<!-- librarian_view.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Librarian Dashboard</title>
+</head>
+<body>
+    <h1>Librarian Dashboard</h1>
+    <p>{{ message }}</p>
+    
+    <h2>Librarian Controls</h2>
+    <ul>
+        <li>Add/Edit library information</li>
+        <li>Manage books in library</li>
+        <li>Track library statistics</li>
+        <li>Generate reports</li>
+    </ul>
+    
+    <p><strong>Your Role:</strong> {{ role }}</p>
+    <p><a href="{% url 'book-list' %}">Back to Books</a></p>
+</body>
+</html>

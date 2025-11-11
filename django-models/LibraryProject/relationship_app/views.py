@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login
 from django.contrib.auth import logout
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.views import LoginView as DjangoLoginView, LogoutView as DjangoLogoutView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
@@ -73,5 +73,83 @@ class LoginView(DjangoLoginView):
 # Django's built-in LogoutView with custom template
 class LogoutView(DjangoLogoutView):
     template_name = 'relationship_app/logout.html'
+
+
+# ============ ROLE-BASED ACCESS CONTROL ============
+
+# Helper functions to check user roles
+def is_admin(user):
+    """
+    Check if user is authenticated and has 'Admin' role.
+    Returns True if user is an Admin, False otherwise.
+    """
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Admin'
+
+
+def is_librarian(user):
+    """
+    Check if user is authenticated and has 'Librarian' role.
+    Returns True if user is a Librarian, False otherwise.
+    """
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Librarian'
+
+
+def is_member(user):
+    """
+    Check if user is authenticated and has 'Member' role.
+    Returns True if user is a Member, False otherwise.
+    """
+    return user.is_authenticated and hasattr(user, 'profile') and user.profile.role == 'Member'
+
+
+# ============ ADMIN VIEW ============
+
+@user_passes_test(is_admin)
+def admin_view(request):
+    """
+    Admin-only view: restricted to users with 'Admin' role.
+    
+    Only admins can access this view. Other users will be redirected to login.
+    This view displays admin controls and information.
+    """
+    context = {
+        'message': 'Welcome Admin! You have full access to all features.',
+        'role': request.user.profile.role,
+    }
+    return render(request, 'relationship_app/admin_view.html', context)
+
+
+# ============ LIBRARIAN VIEW ============
+
+@user_passes_test(is_librarian)
+def librarian_view(request):
+    """
+    Librarian-only view: restricted to users with 'Librarian' role.
+    
+    Only librarians can access this view. Other users will be redirected to login.
+    This view displays librarian controls and library management options.
+    """
+    context = {
+        'message': 'Welcome Librarian! You can manage library and books.',
+        'role': request.user.profile.role,
+    }
+    return render(request, 'relationship_app/librarian_view.html', context)
+
+
+# ============ MEMBER VIEW ============
+
+@user_passes_test(is_member)
+def member_view(request):
+    """
+    Member-only view: restricted to users with 'Member' role.
+    
+    Only members can access this view. Other users will be redirected to login.
+    This view displays member information and member-accessible features.
+    """
+    context = {
+        'message': 'Welcome Member! You have read-only access to library resources.',
+        'role': request.user.profile.role,
+    }
+    return render(request, 'relationship_app/member_view.html', context)
 
 
