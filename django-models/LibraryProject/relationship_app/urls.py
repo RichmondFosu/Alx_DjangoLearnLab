@@ -33,8 +33,8 @@ urlpatterns = [
     path('member/', member_view, name='member-view'),
     
     # Permission-based book management views
-    path('books/add/', add_book, name='add-book'),
-    path('books/<int:book_id>/edit/', edit_book, name='edit-book'),
+    path('add_book/', add_book, name='add-book'),
+    path('edit_book/<int:book_id>/', edit_book, name='edit-book'),
     path('books/<int:book_id>/delete/', delete_book, name='delete-book'),
 ]
 
