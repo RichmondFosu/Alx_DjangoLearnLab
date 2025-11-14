@@ -10,6 +10,8 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy
 from .models import Library, Book, Author
+from django.core.exceptions import ObjectDoesNotExist
+from LibraryProject.bookshelf.models import UserProfile
 from .forms import CustomUserCreationForm
 
 # Create your views here.
@@ -69,6 +71,21 @@ def register(request):
 class LoginView(DjangoLoginView):
     template_name = 'relationship_app/login.html'
     success_url = reverse_lazy('book-list')
+    
+    def form_valid(self, form):
+        """
+        Ensure the logged-in user has an associated UserProfile.
+        Some users (created before the profile signal existed) may lack
+        a related profile which causes templates accessing `user.profile`
+        to raise errors. Create a default profile here if missing.
+        """
+        response = super().form_valid(form)
+        user = self.request.user
+        try:
+            _ = user.profile
+        except ObjectDoesNotExist:
+            UserProfile.objects.create(user=user)
+        return response
 
 
 # Django's built-in LogoutView with custom template

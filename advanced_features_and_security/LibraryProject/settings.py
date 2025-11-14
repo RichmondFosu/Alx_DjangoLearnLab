@@ -30,6 +30,10 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+# After login, redirect users to a page that exists
+LOGIN_REDIRECT_URL = '/books/'   # or any page you want users to land on
+
+
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
 INSTALLED_APPS = [
