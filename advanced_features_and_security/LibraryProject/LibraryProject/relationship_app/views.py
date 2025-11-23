@@ -12,7 +12,7 @@ from django.urls import reverse_lazy
 from .models import Library, Book, Author
 from django.core.exceptions import ObjectDoesNotExist
 from LibraryProject.bookshelf.models import UserProfile
-from .forms import CustomUserCreationForm
+from ..bookshelf.forms import CustomUserCreationForm
 
 # Create your views here.
 def book_list(request):
