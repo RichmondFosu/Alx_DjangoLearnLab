@@ -21,3 +21,11 @@ class CustomUserCreationForm(UserCreationForm):
         if email and User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already registered.")
         return email
+
+class ExampleForm(forms.Form):
+    """
+    Simple example form required by the test.
+
+    """
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
