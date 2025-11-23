@@ -1,22 +1,23 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+
+User = get_user_model()
+
 
 class CustomUserCreationForm(UserCreationForm):
     """
-    Extended registration form.
-    UserCreationForm is built into Django and handles password hashing,
-    validation, and password confirmation.
+    Extended registration form bound to the project's user model.
+    Uses `get_user_model()` so it works with `AUTH_USER_MODEL`.
     """
     email = forms.EmailField(required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password1', 'password2')
+        fields = ("username", "email", "password1", "password2")
 
     def clean_email(self):
-        """Ensure email is unique"""
-        email = self.cleaned_data.get('email')
-        if User.objects.filter(email=email).exists():
+        email = self.cleaned_data.get("email")
+        if email and User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already registered.")
         return email
