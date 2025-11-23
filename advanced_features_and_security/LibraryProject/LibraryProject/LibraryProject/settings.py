@@ -23,16 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-0(33_5$$mtoe*8a6jz)gohoud=l96^r$jifldi78^(19vs17=%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False # set to False in production to avoid exposing debug info
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
 
 # Application definition
-
-# After login, redirect users to a page that exists
-LOGIN_REDIRECT_URL = '/books/'   # or any page you want users to land on
-
 
 AUTH_USER_MODEL = 'bookshelf.CustomUser'
 
@@ -55,15 +51,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'csp.middleware.CSPMiddleware',
 ]
-
-# Only allow scripts and styles from our own domain
-CSP_DEFAULT_SRC = ("'self'",)
-CSP_SCRIPT_SRC = ("'self'",)
-CSP_STYLE_SRC = ("'self'",)
-CSP_IMG_SRC = ("'self'", "data:")
-
 
 ROOT_URLCONF = 'LibraryProject.urls'
 
@@ -136,14 +124,3 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# security headers
-SECURE_BROWSER_XSS_FILTER = True #Enable browser XSS filter
-SECURE_CONTENT_TYPE_NOSNIFF = True #Prevent MIME type sniffing
-X_FRAME_OPTIONS = 'DENY' #Prevent clickjacking by disallowing iframing
-
-# secure cookies
-CSRF_COOKIE_SECURE = True # ensure CSRF cookie is only sent over HTTPS only
-SESSION_COOKIE_SECURE = True # ensure session cookie is only sent over HTTPS only
-
-
