@@ -1,13 +1,13 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
 User = get_user_model()
 
 
 class CustomUserCreationForm(UserCreationForm):
     """
-    Registration form for the project's custom user model.
+    Extended registration form bound to the project's user model.
     Uses `get_user_model()` so it works with `AUTH_USER_MODEL`.
     """
     email = forms.EmailField(required=True)
@@ -21,3 +21,11 @@ class CustomUserCreationForm(UserCreationForm):
         if email and User.objects.filter(email=email).exists():
             raise forms.ValidationError("This email is already registered.")
         return email
+
+class ExampleForm(forms.Form):
+    """
+    Simple example form required by the test.
+
+    """
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()

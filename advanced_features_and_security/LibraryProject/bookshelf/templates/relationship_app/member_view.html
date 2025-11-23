@@ -1,0 +1,23 @@
+<!-- member_view.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Member Dashboard</title>
+</head>
+<body>
+    <h1>Member Dashboard</h1>
+    <p>{{ message }}</p>
+    
+    <h2>Member Features</h2>
+    <ul>
+        <li>Browse available books</li>
+        <li>View library information</li>
+        <li>Check book availability</li>
+        <li>View member profile</li>
+    </ul>
+    
+    <p><strong>Your Role:</strong> {{ role }}</p>
+    <p><a href="{% url 'book-list' %}">Back to Books</a></p>
+</body>
+</html>
