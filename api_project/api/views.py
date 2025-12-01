@@ -2,10 +2,11 @@ from django.shortcuts import render
 from .serializers import BookSerializer
 from .models import Book
 from rest_framework import generics, viewsets
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
-class BookListListAPIView(generics.ListAPIView):
+class BookListAPIView(generics.ListAPIView):
     '''
     gets the list of all books
     '''
