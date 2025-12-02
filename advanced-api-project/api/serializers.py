@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Author, Book
 from datetime import datetime
+from django.contrib.auth.models import User
 
 class BookSerializer(serializers.ModelSerializer):
     '''
@@ -34,4 +35,27 @@ class AuthorSerializer(serializers.ModelSerializer):
         model = Author
         fields = ['id', 'name', 'books']
 
-        
+# <---------User Serializer-------------->
+
+class UserSerializer(serializers.ModelSerializer):
+    '''serializer for creating new user accounts
+        ensures the password is properly hashed
+    '''
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'password']
+
+        # hide pssword in output + require on input
+
+        extra_kwargs = {
+            'password': {'write_only': True}
+        }
+    def create(self,validated_data):
+        # create user with hashed password
+        user = User(
+            username = validated_data['username'],
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
