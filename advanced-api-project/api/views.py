@@ -3,6 +3,7 @@ from rest_framework import generics,permissions
 from .models import Book,Author
 from .serializers import BookSerializer
 from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAuthenticated 
 
 # List View
 class BookListView(generics.ListAPIView):
