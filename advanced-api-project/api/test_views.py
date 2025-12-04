@@ -63,7 +63,7 @@ class BookAPITestCase(APITestCase):
 
     # -------------------- UPDATE BOOK --------------------
     def test_update_book_authenticated(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpass')  # use login instead
         url = reverse('book-update', kwargs={'pk': self.book1.id})
         data = {'title': 'Updated Book One'}
         response = self.client.patch(url, data, format='json')
@@ -79,7 +79,7 @@ class BookAPITestCase(APITestCase):
 
     # -------------------- DELETE BOOK --------------------
     def test_delete_book_authenticated(self):
-        self.client.force_authenticate(user=self.user)
+        self.client.login(username='testuser', password='testpass')  # use login instead
         url = reverse('book-delete', kwargs={'pk': self.book2.id})
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
